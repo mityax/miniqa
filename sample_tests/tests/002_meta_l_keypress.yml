@@ -1,0 +1,13 @@
+name: meta_l_keypress
+
+from: base
+
+steps:
+  - sleep: 7s
+  - mouse_move:
+      find:
+        text: Next
+  - click:
+  - sleep: 5s
+  - screenshot:
+      name: meta_l_keypress

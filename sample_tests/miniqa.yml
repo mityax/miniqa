@@ -1,0 +1,13 @@
+
+image: img/gnome_os_disk.img
+
+headless: true
+use_ovmf: true
+qemu_args: [
+  "-device", "virtio-keyboard-pci",
+  "-device", "virtio-multitouch-pci",
+  "-device", "virtio-mouse",
+  "-device", "VGA,edid=on,xres=1080,yres=720"
+]
+
+cache_dir: ./miniqa-cache
