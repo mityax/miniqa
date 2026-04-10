@@ -37,3 +37,6 @@ jobs:
 
           docker push $IMAGE_NAME:$TAG-no-ocr
           docker push $IMAGE_NAME:$TAG
+          
+          docker push $IMAGE_NAME:latest-no-ocr
+          docker push $IMAGE_NAME:latest
