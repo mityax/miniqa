@@ -16,7 +16,6 @@ async def position_to_coordinates(worker: QEMUWorker, position: f.AnyPosition,
                                   translate_to_input_coordinates: bool = False) -> tuple[int, int]:
     if isinstance(position, f.FindElement):
         fname = os.path.join(RUNTIME_TMPDIR, f'position-to-coordinates-{time.time()}.ppm')
-
         await worker.qmp.screendump(fname)
 
         element = await find_element(
@@ -33,7 +32,7 @@ async def position_to_coordinates(worker: QEMUWorker, position: f.AnyPosition,
             raise TestException.PositionNotFound(f"Could not find element: {position.find}")
         else:
             x, y, w, h = element
-            res = (round(x+w/2), round(y+h/2))
+            res = (round(x + w/2), round(y + h/2))
     else:
         coords = f.to_parsed_position(position)
         values = [coords[0].value, coords[1].value]
@@ -54,8 +53,8 @@ async def position_to_coordinates(worker: QEMUWorker, position: f.AnyPosition,
     if translate_to_input_coordinates:
         w, h = await worker.qmp.screen_size
         res = (
-            int((res.x / w) * QEMU_INPUT_COORDINATE_RESOLUTION),
-            int((res.y / h) * QEMU_INPUT_COORDINATE_RESOLUTION),
+            int((res[0] / w) * QEMU_INPUT_COORDINATE_RESOLUTION),
+            int((res[1] / h) * QEMU_INPUT_COORDINATE_RESOLUTION),
         )
 
     return res

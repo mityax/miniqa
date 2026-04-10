@@ -1,0 +1,104 @@
+
+# This test starts at boot and will work through the GNOME OS setpu wizard appearing 
+# automatically. It'll then create a snapshot called "base", from which other tests
+# can start.
+
+
+env:                                  # variables make our life easer; they can also be set from
+  MY_NAME: Jane Done                  # miniqa.yml to be usable across all tests.
+  MY_PASSWORD: thisisultrasecure
+
+
+steps:                                # these steps will be run by miniQA for this test
+
+  - wait:                             # - `wait` is a very useful step; in this case, we wait for
+      for:                            #   the GNOME OS setup wizard to show up, by awaiting the 
+        dominant_color: "#fafafb"     #   background color of its window to dominate the screen
+      timeout: 120s                   # - if waiting times out, our test fails. Since booting can
+                                      #   take some time, we increase the default timeout here.
+
+  - click:                            # - we're on the language selection screen; english is pre-
+      find:                           #   selected, so we'll just move on to the next page by 
+        text: "Next"                  #   clicking the "Next" button
+        location_hint: top-right      # - optionally, we can tell miniQA the buttons approximate
+                                      #   location to improve text recognition performance
+
+  - wait:                             # wait for any significant screen change (default: 1% of pixels)
+
+  - click: 96% 7.5%                   # of course, we can also switch to the next page by just 
+                                      # clicking the "Next" button via its coordinates; this is more
+                                      # efficient than text recognition, but might be less resilient
+                                     
+  - wait:
+
+  - click: -30px 50px                 # this time, switch the page in absolute coordinates; negative
+                                      # coordinates start from the right (resp. bottom)
+
+  - wait:                             # we can also wait for a certain phrase to appear on screen; this
+      for:                            # is a good way to ensure we're at the correct page and is also
+        find:                         # very descriptive
+          text: Time Zone
+
+  - type_text: Riga                   # at the "Time Zone" page, let's choose "Riga", then chose the first
+  - invoke_keys:                      # dropdown entry and confirm by pressing the return key (this also
+      - down                          # switches the page)
+      - ret
+
+  - wait:
+      for:
+        find:
+          text: About You
+
+  - type_text: $MY_NAME               # we're at "About You", lets enter our name and confirm
+  - invoke_key: ret
+
+  - wait:
+      for:
+        find:
+          text: Password
+
+  - type_text: $MY_PASSWORD           # enter our password
+  - invoke_keys:                      # switch focus to the "Confirm Password" field
+      - tab
+      - tab
+  - type_text: $MY_PASSWORD           # confirm our password
+  
+  - wait:                             # - our password will be validated now, we'll need to wait until
+      for:                            #   the "Next" button is enabled again, which we can do by awaiting...
+        dominant_color: "#4a91e7"     # - ... its color change from greyed out to lightblue
+      regions:                        # - since the button is only one tiny element on the screen, we'll
+        - 93.0% 5.3% 6.3% 4.6%        #   only check for the dominant color in that region (-> "x y w h")
+  
+  - touch: 96% 7.5%                   # we can also invoke the "Next" button using our touchscreen :)
+
+  - wait:                             # hoooray! – we've completed the setup wizard!
+      for:
+        find:
+          text: All done!
+
+  - click:                            # close the setup wizard
+      find:
+        text: "Start using GNOME OS"
+
+  - wait:
+
+  - snapshot: base                    # snapshots are a crucial part of miniQA's architecture; they capture
+                                      # the exact machine state, including memory and CPU (thanks, QEMU!)
+                                      # so other tests can quickly, reliably and reproducibly start from
+                                      # this point (and won't have to go through the setup wizard again)
+
+
+---                                   # the YAML document separator serves as a breakpoint in miniQA
+                                      # test development. You can quickly place it anywhere in the file
+                                      # and everything after it will be ignored by miniQA
+
+
+  # Note: At this point, the "Welcome to GNOME OS Nightly" popup will appear, and next comes the 
+  # installation wizard; Going past these is left as an exercise for the reader - it'll be a breeze
+  # using the miniQA webui :)
+
+  - wait:
+      # TODO: start here
+
+
+

@@ -1,13 +1,13 @@
+image: img/gnome_os_disk.img                   # the image our VM boots
 
-image: img/gnome_os_disk.img
-
-headless: true
-use_ovmf: true
+use_ovmf: true                                 # required to boot GNOME OS
 qemu_args: [
-  "-device", "virtio-keyboard-pci",
-  "-device", "virtio-multitouch-pci",
-  "-device", "virtio-mouse",
-  "-device", "VGA,edid=on,xres=1080,yres=720"
+  "-device", "virtio-multitouch-pci",          # adds multitouch capabilities to the VM
+  "-device", "VGA,edid=on,xres=1080,yres=720"  # ensures a fixed screen resolution
 ]
 
-cache_dir: ./miniqa-cache
+cache_directory: ./miniqa-cache
+
+serve_assets:
+  - assets
+  - ../sample_tests

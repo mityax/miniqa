@@ -1,0 +1,56 @@
+
+# Requirements:
+#  - The `base` test case must be completed to close both welcome popups before creating the snapshot
+
+from: base
+
+
+assets:
+  # This script downloads pip, miniQA, and sample tests, and launches the webui:
+  setup: |
+    echo "Downloading pip..."
+    wget -q https://bootstrap.pypa.io/pip/pip.pyz
+    
+    echo "Installing miniQA..."
+    python ../pip.pyz install miniqa
+    
+    echo "Downloading sample tests..."
+    mkdir tests && cd tests
+    wget ${ASSETS_SERVER_ADDR}/sample_tests/tests/base.yml \
+         ${ASSETS_SERVER_ADDR}/sample_tests/tests/test_miniqa_webui.yml
+    cd ..
+    wget ${ASSETS_SERVER_ADDR}/sample_tests/miniqa.yml
+    
+    echo "Launching miniQA webui..."
+    miniqa editor
+
+defs:
+  open_overview:
+    - invoke_key: meta_l
+    - wait:
+
+steps:
+  # Open a terminal:
+  - open_overview:
+  - type_text: "terminal"
+  - sleep: 300ms
+  - invoke_key: ret
+  - wait:
+      for: terminal_opened
+
+  # Install miniQA
+  - type_text: "curl ${ASSETS_SERVER_ADDR}/setup | bash"
+  - invoke_key: ret
+
+  # Wait for the webui to open:
+  - wait:
+      for:
+        find:
+          text: "miniQA WebUI"
+          location_hint: top-left
+      timeout: 260s
+
+  # Expand this test, check if the screenshot matches:
+  - click: 30% 30%
+  - wait:
+      for: test_miniqa_webui/test_expanded

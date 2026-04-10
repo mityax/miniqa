@@ -121,7 +121,7 @@ async def api_img():
     allowed = (
         resolved.is_relative_to(Path(CONFIG.out_directory).resolve())
         or resolved.is_relative_to(Path(CONFIG.refs_directory).resolve())
-        or resolved.is_relative_to(Path(CONFIG.cache_dir).resolve())
+        or resolved.is_relative_to(Path(CONFIG.cache_directory).resolve())
     )
 
     if not allowed: abort(403)

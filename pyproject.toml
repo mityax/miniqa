@@ -25,6 +25,9 @@ dependencies = [
 default = []  # to simplify Containerfile
 ocr     = ["ppocr-lite[fast]>=0.5.5"]
 
+[project.scripts]
+miniqa = "miniqa.__main__:main"
+
 [tool.setuptools.packages.find]
 include = ["miniqa*"]
 

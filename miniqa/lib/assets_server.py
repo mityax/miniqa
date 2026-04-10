@@ -40,7 +40,10 @@ class MultiFolderHandler(http.server.SimpleHTTPRequestHandler):
         logging.debug(f"[AssetServer] {fmt % args}")
 
     def log_error(self, fmt: str, *args):
-        logging.debug(f"[AssetServer] {fmt % args}")
+        msg = fmt % args
+        logging.debug(f"[AssetServer] Error: {msg}")
+        if "404" in msg:
+            logging.debug(f"[AssetServer] Registered assets are {tuple(mounts.keys()) + tuple(_floating_assets.keys())}")
 
 
 mounts: dict[str, str] | None = None
@@ -115,6 +118,9 @@ def floating_assets(assets: dict[str, str]):
 
     global _floating_assets
 
+    if assets:
+        logging.debug(f"Registering floating assets {tuple(assets.keys())}")
+
     for pth, content in assets.items():
         if pth in _floating_assets:
             raise RuntimeError(f"Asset \"{pth}\" exists already; do not reuse asset identifiers across test cases if "
@@ -124,5 +130,7 @@ def floating_assets(assets: dict[str, str]):
     try:
         yield
     finally:
+        if assets:
+            logging.debug(f"Unregistering floating assets {tuple(assets.keys())}")
         for pth in assets.keys():
             del _floating_assets[pth]

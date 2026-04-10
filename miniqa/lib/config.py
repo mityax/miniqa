@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import atexit
 import os
 import shutil
@@ -19,13 +21,13 @@ class ConfigFile(NoExtraBaseModel):
     tests_directory: str = './tests'
     out_directory: str = './out'
     refs_directory: str = './refs'
-    cache_dir: str | None = None
+    cache_directory: str | None = None
     qemu_args: list[str] = pydantic.Field(default_factory=lambda: [])
     headless: bool = True
     serve_assets: list[str] = pydantic.Field(default_factory=lambda: [])
     use_ovmf: bool | OVMFConfig = False
     ignore_regions: RegionOrRegions | None = None
-    env: dict[str, str | int | float | bool] = pydantic.Field(default_factory=lambda: {})
+    env: dict[str, Any] = pydantic.Field(default_factory=lambda: {})
     defs: Any | None = None
 
     @model_validator(mode="before")
@@ -58,10 +60,10 @@ else:
     raise RuntimeError("No miniqa.yml found.")
 
 
-CACHE_DIR = os.path.join(CONFIG.cache_dir, 'cache') if CONFIG.cache_dir else "./miniqa-cache/cache"
+CACHE_DIR = os.path.join(CONFIG.cache_directory, 'cache') if CONFIG.cache_directory else "./miniqa-cache/cache"
 """A possibly temporary directory to use for caching, across multiple runs."""
 
-RUNTIME_TMPDIR = os.path.join(CONFIG.cache_dir, f'miniqa-run-{os.getpid()}-{time.time()}') if CONFIG.cache_dir else tempfile.mkdtemp('miniqa-runtime')
+RUNTIME_TMPDIR = os.path.join(CONFIG.cache_directory, f'miniqa-run-{os.getpid()}-{time.time()}') if CONFIG.cache_directory else tempfile.mkdtemp('miniqa-runtime')
 """A runtime-specific temporary directory, deleted upon exit."""
 
 os.makedirs(CACHE_DIR, exist_ok=True)

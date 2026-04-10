@@ -217,14 +217,16 @@ def main():
     try:
         asyncio.run(cli())
     except KeyboardInterrupt:
-        sys.exit(0)
+        pass
     except RuntimeError as e:
         if 'Event loop stopped before Future completed' in repr(e):
-            sys.exit(1)
+            return 1
         else:
             raise
 
+    return 0
+
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
 

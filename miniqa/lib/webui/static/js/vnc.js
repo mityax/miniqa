@@ -131,19 +131,15 @@ export function initVncOverlay(overlayEl) {
       const ch = clamp(hpct, 0, 100 - cy);
 
       if (shiftKey) {
-        try {
-          const scaleX = canvas.width  / canvasRect.width;
-          const scaleY = canvas.height / canvasRect.height;
-          const px1 = Math.round((Math.min(startX, e.clientX) - canvasRect.left) * scaleX);
-          const py1 = Math.round((Math.min(startY, e.clientY) - canvasRect.top)  * scaleY);
-          const pw  = Math.max(1, Math.round(Math.abs(e.clientX - startX) * scaleX));
-          const ph  = Math.max(1, Math.round(Math.abs(e.clientY - startY) * scaleY));
-          const ctx = canvas.getContext('2d');
-          insertOrCopy(getDominantColor(ctx.getImageData(px1, py1, pw, ph)));
-        } catch (err) {
-          toast('Could not read canvas pixels (cross-origin?)', 'error');
-          console.error(err);
-        }
+        const scaleX = canvas.width  / canvasRect.width;
+        const scaleY = canvas.height / canvasRect.height;
+        const px1 = Math.round((Math.min(startX, e.clientX) - canvasRect.left) * scaleX);
+        const py1 = Math.round((Math.min(startY, e.clientY) - canvasRect.top)  * scaleY);
+        const pw  = Math.max(1, Math.round(Math.abs(e.clientX - startX) * scaleX));
+        const ph  = Math.max(1, Math.round(Math.abs(e.clientY - startY) * scaleY));
+        const ctx = canvas.getContext('2d');
+        const colorStr = getDominantColor(ctx.getImageData(px1, py1, pw, ph))
+        insertOrCopy(`"${colorStr}"`);  // quote the color, since it'd be a YAML comment otherwise
       } else {
         insertOrCopy(`${cx.toFixed(1)}% ${cy.toFixed(1)}% ${cw.toFixed(1)}% ${ch.toFixed(1)}%`);
       }
@@ -152,15 +148,12 @@ export function initVncOverlay(overlayEl) {
       const y = toPct(e.clientY - canvasRect.top,  canvasRect.height);
 
       if (shiftKey) {
-        try {
-          const ctx = canvas.getContext('2d');
-          const px  = Math.round((e.clientX - canvasRect.left) * (canvas.width  / canvasRect.width));
-          const py  = Math.round((e.clientY - canvasRect.top)  * (canvas.height / canvasRect.height));
-          const d   = ctx.getImageData(px, py, 1, 1).data;
-          insertOrCopy(`#${[d[0], d[1], d[2]].map(v => v.toString(16).padStart(2, '0')).join('')}`);
-        } catch {
-          toast('Could not read pixel (cross-origin canvas?)', 'error');
-        }
+        const ctx = canvas.getContext('2d');
+        const px  = Math.round((e.clientX - canvasRect.left) * (canvas.width  / canvasRect.width));
+        const py  = Math.round((e.clientY - canvasRect.top)  * (canvas.height / canvasRect.height));
+        const d   = ctx.getImageData(px, py, 1, 1).data;
+        const colorStr = `#${[d[0], d[1], d[2]].map(v => v.toString(16).padStart(2, '0')).join('')}`;
+        insertOrCopy(`"${colorStr}"`);  // quote the color, since it'd be a YAML comment otherwise
       } else {
         insertOrCopy(`${x.toFixed(1)}% ${y.toFixed(1)}%`);
       }

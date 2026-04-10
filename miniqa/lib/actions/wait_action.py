@@ -6,7 +6,6 @@ import time
 
 import numpy
 from PIL.Image import Image
-from ppocr_lite.utils import log_perf
 
 from miniqa.lib.test_case.test_case_file import FindElement
 from ..config import CONFIG
@@ -69,15 +68,14 @@ async def run_wait_step(step: f.WaitStep, worker: QEMUWorker):
                 )
             elif for_find_element:
                 img = open_image(pth)  # load the image, so it's cached for the next comparison -> only load each image once
-                with log_perf("_check_done_find_element"):
-                    is_done, timeout_msg = await _check_done_find_element(
-                        pth=pth,
-                        current_img=img,
-                        last_img=cached_last_img,
-                        element_to_find=for_find_element,
-                        regions=regions,
-                        ignore_regions=ignore_regions,
-                    )
+                is_done, timeout_msg = await _check_done_find_element(
+                    pth=pth,
+                    current_img=img,
+                    last_img=cached_last_img,
+                    element_to_find=for_find_element,
+                    regions=regions,
+                    ignore_regions=ignore_regions,
+                )
             elif for_img:
                 is_done, timeout_msg = await _check_done_image_match(
                     current_pth=pth,
