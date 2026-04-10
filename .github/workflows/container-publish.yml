@@ -24,6 +24,7 @@ jobs:
           IMAGE_NAME=ghcr.io/${{ github.repository }}
           TAG=${{ github.event.release.tag_name }}
 
+          docker build . --file Containerfile --tag $IMAGE_NAME:$TAG-no-ocr
           docker build . --file Containerfile --tag $IMAGE_NAME:$TAG
 
       - name: Push the Docker image
@@ -31,4 +32,5 @@ jobs:
           IMAGE_NAME=ghcr.io/${{ github.repository }}
           TAG=${{ github.event.release.tag_name }}
 
+          docker push $IMAGE_NAME:$TAG-no-ocr
           docker push $IMAGE_NAME:$TAG

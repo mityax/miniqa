@@ -39,7 +39,7 @@ if [ -x "$(command -v podman)" ]; then
       -p 8080:8080 \
       -p 6080:6080 \
       -v .:/tests \
-      miniqa "${COMMAND[@]}"
+      ghcr.io/mityax/miniqa "${COMMAND[@]}"
 
 elif [ -x "$(command -v docker)" ]; then
   echo "Running using docker"
@@ -51,7 +51,7 @@ elif [ -x "$(command -v docker)" ]; then
       -p 8080:8080 \
       -p 6080:6080 \
       -v .:/tests \
-      miniqa "${COMMAND[@]}"
+      ghcr.io/mityax/miniqa "${COMMAND[@]}"
 
 elif [ -x "$(command -v miniqa)" ]; then
   echo "Running using local install"

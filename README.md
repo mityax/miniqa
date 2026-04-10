@@ -39,7 +39,7 @@ docker run \
     -p 8080:8080 \
     -p 6080:6080 \
     -v .:/tests \
-    miniqa run    # - or: `miniqa editor` for the webui
+    ghcr.io/mityax/miniqa run    # - or: `miniqa editor` for the webui
 ```
 
 ## Quick Start
