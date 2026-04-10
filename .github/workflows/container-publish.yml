@@ -26,6 +26,9 @@ jobs:
 
           docker build . --file Containerfile --tag $IMAGE_NAME:$TAG-no-ocr
           docker build . --file Containerfile --build-arg EXTRAS="ocr" --tag $IMAGE_NAME:$TAG
+          
+          docker tag $IMAGE_NAME:$TAG-no-ocr $IMAGE_NAME:latest-no-ocr
+          docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest
 
       - name: Push the Docker image
         run: |
