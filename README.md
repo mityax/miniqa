@@ -20,7 +20,7 @@ Make sure you have the runtime dependencies (`qemu-system-x86`, `qemu-utils` and
 - Debian: `sudo apt install qemu-system-x86 qemu-utils ovmf`
 - Fedora: `sudo dnf install qemu-system-x86 qemu-img edk2-ovmf`
 
-Now, you can just run your tests by running this from your tests folder:
+To run your tests, invoke this from your tests folder:
 
 ```bash
 miniqa run    # - or: `miniqa editor` for the webui
@@ -45,39 +45,8 @@ docker run \
 ## Quick Start
 
 ### Setup the Files:
-In your project, create a `tests` folder. Everything miniQA will live in this folder. In this folder, you need to create:
 
-- An `img` folder: Here, the OS image(s) will be located. For example, you can grab a copy of
-  [GNOME OS Nightly](https://os.gnome.org/) and place it in `img/gnome_os_disk.img`.
-- A `miniqa.yml` file: This file contains your overall miniQA configuration and can look like this:
-
-	```yaml
-    image: img/gnome_os_disk.img                   # the image our VM boots
-
-    use_ovmf: true                                 # required to boot GNOME OS
-    qemu_args: [
-      "-device", "virtio-multitouch-pci",          # adds multitouch capabilities to the VM
-      "-device", "VGA,edid=on,xres=1080,yres=720"  # ensures a fixed screen resolution
-    ]
-    
-    cache_directory: ./miniqa-cache
-	```
-- A nested `tests` folder: This will contain your test cases, e.g. 
-  [`example_test.yml`](sample_tests/tests/base.yml), or this one:
-
-    ```yaml
-    steps:
-      - wait:                                      # - wait for boot to complete, and then for the GNOME OS
-          for:                                     #   setup wizard (which has gray background) to show up
-            dominant_color: '#fafafb' 
-          timeout: 120s                            # - on timeout, our test will fail
-      - click:                                     # - go to the next page      
-          find:
-            text: Next
-      - snapshot: base                             # - create a snapshot other tests can start from
-    ```
-
-Your overall directory structure should now look like this:
+This is the directory structure we're going to need:
 
 ```
 your_project
@@ -91,6 +60,36 @@ your_project
     │   └── …
     └── miniqa.yml
 ```
+
+- The `img` folder: The OS image(s) will be located here. For example, you can grab a copy of
+  [GNOME OS Nightly](https://os.gnome.org/) and place it in `img/gnome_os_disk.img`.
+- The `miniqa.yml` file: This file contains your overall miniQA configuration and can look like this:
+
+	```yaml
+    image: img/gnome_os_disk.img                   # the image our VM boots
+
+    use_ovmf: true                                 # required to boot GNOME OS
+    qemu_args: [
+      "-device", "virtio-multitouch-pci",          # adds multitouch capabilities to the VM
+      "-device", "VGA,edid=on,xres=1080,yres=720"  # ensures a fixed screen resolution
+    ]
+    
+    cache_directory: ./miniqa-cache
+	```
+- The nested `tests` folder: This will contain your test cases, e.g. 
+  [`example_test.yml`](sample_tests/tests/base.yml), or this one:
+
+    ```yaml
+    steps:
+      - wait:                                      # - wait for boot to complete, and then for the GNOME OS
+          for:                                     #   setup wizard (which has gray background) to show up
+            dominant_color: '#fafafb' 
+          timeout: 120s                            # - on timeout, our test will fail
+      - click:                                     # - go to the next page      
+          find:
+            text: Next
+      - snapshot: base                             # - create a snapshot other tests can start from
+    ```
 
 ### Run your Tests
 Now, you're ready to run your first test:
