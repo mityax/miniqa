@@ -1,0 +1,34 @@
+name: Build & Publish Container Image
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write   # REQUIRED for pushing to GHCR
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build the Docker image
+        run: |
+          IMAGE_NAME=ghcr.io/${{ github.repository }}
+          TAG=${{ github.event.release.tag_name }}
+
+          docker build . --file Containerfile --tag $IMAGE_NAME:$TAG
+
+      - name: Push the Docker image
+        run: |
+          IMAGE_NAME=ghcr.io/${{ github.repository }}
+          TAG=${{ github.event.release.tag_name }}
+
+          docker push $IMAGE_NAME:$TAG
