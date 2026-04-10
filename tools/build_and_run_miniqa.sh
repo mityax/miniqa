@@ -43,7 +43,7 @@ if [ -x "$(command -v podman)" ]; then
       --tmpfs /tmp:size=1G,mode=1700 \
       -p 8080:8080 \
       -p 6080:6080 \
-      -v .:/tests \
+      -v .:/tests:z \
       miniqa "${COMMAND[@]}"
 
 elif [ -x "$(command -v docker)" ]; then

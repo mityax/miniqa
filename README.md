@@ -12,7 +12,7 @@ miniQA includes a simple web editor/mini IDE providing some helpful tools to wri
 miniQA can be installed via pip:
 
 ```bash
-pip install miniqa
+pip install miniqa  # - or: `pip install miniqa[ocr]` for text recognition support
 ```
 
 Make sure you have the runtime dependencies (`qemu-system-x86`, `qemu-utils` and optionally `ovmf`) installed as well:
@@ -41,6 +41,9 @@ docker run \
     -v .:/tests \
     ghcr.io/mityax/miniqa run    # - or: `miniqa editor` for the webui
 ```
+
+> Note that the default images include text recognition support; if you don't use that functionality, you
+can use the `ghcr.io/mityax/miniqa:latest-no-ocr` image instead, which is just about half the size.
 
 ## Quick Start
 
