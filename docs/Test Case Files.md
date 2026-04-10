@@ -46,12 +46,12 @@ Variables can be of any YAML-supported type and can be used in any value in the 
 
 ```yaml
 steps:
-	- type_text: "${USERNAME}@example.com"
-	- click: $BUTTON_POSITION
-	- type_text: "${PASSWORD:-defaultpassword123}"  # fallback values are supported
-	- wait:
-		for: welcome_popup
-		regions: $POPUP_REGION
+    - type_text: "${USERNAME}@example.com"
+    - click: $BUTTON_POSITION
+    - type_text: "${PASSWORD:-defaultpassword123}"  # fallback values are supported
+    - wait:
+        for: welcome_popup
+        regions: $POPUP_REGION
 ```
 
 You can also specify global variables in your `miniqa.yml` file's `env` field; these variables will be accessible across all tests and are therefore particularly useful for project-wide configurations.

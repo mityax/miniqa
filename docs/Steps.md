@@ -45,25 +45,26 @@ Converts the given string into a list of key events, which are then sent sequent
 #### `mouse_move` – Move the Mouse
 
 ```yaml
-- mouse_move: <Position>
+- mouse_move: <Position>|<MouseButtonArgs>
 ```
 
 #### `mouse_press` – Press a Mouse Button
 
 ```yaml
-- mouse_press: <Position>  # value is optional; default: current mouse position
+- mouse_press: <Position>|<MouseButtonArgs>  # value is optional; default: current mouse position
+  button: 
 ```
 
 #### `mouse_release` – Release a Mouse Button
 
 ```yaml
-- mouse_release: <Position>  # value is optional; default: current mouse position
+- mouse_release: <Position>|<MouseButtonArgs>  # value is optional; default: current mouse position
 ```
 
 #### `click` – Press and Release a Mouse Button
 
 ```yaml
-- click: <Position>  # value is optional; default: current mouse position
+- click: <Position>|<MouseButtonArgs>  # value is optional; default: current mouse position
 ```
 
 #### `touch_press` – Press Down on the Touchscreen
@@ -101,7 +102,7 @@ Converts the given string into a list of key events, which are then sent sequent
 - sleep: <Duration>
 ```
 
-### `wait` – Wait for a Condition to be Met
+#### `wait` – Wait for a Condition to be Met
 
 This is likely the most important step to miniQA's test system; it waits for a certain condition to be met by periodically checking within the specified timeout. If the condition is not met within the timeout, the test will fail.
 
@@ -293,6 +294,15 @@ slow | slower | normal | faster | fast
 ```
 ```yaml
 <float>%
+```
+
+### `MouseButtonArgs`
+
+Formatting options:
+
+```yaml
+position: <Position>
+button: left | middle | right   # optional; default: left
 ```
 
 ### `TouchArgs`
