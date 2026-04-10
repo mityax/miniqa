@@ -5,6 +5,8 @@
 # This script will also download the latest GNOME OS nightly disk image, if its not yet present, and build miniQA from
 # source.
 
+cd ../sample_tests
+
 set -eou pipefail
 
 IMG_DOWNLOAD_URL="https://os.gnome.org/download/latest/gnome_os_nightly.iso"

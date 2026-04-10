@@ -128,7 +128,7 @@ export const EditView = defineComponent({
       const doSave = () =>
         send('save_test', { stem: state.edit.test_stem, yaml: state.edit.yaml });
 
-      if (state.schema && typeof jsyaml !== 'undefined') {
+      if (state.schema) {
         let parsed;
         try { parsed = jsyamlParse(state.edit.yaml); } catch { doSave(); return; }
         const errors = await validateAgainstSchema(parsed);

@@ -65,7 +65,6 @@ export function initEditor(container, initialYaml, onChange, onScrollChange) {
 // -- Linting -------------------------------------------------------------------
 
 function _lintYaml(editor) {
-  if (typeof jsyaml === 'undefined') return;
   const text = editor.getValue();
   if (!text.trim()) { editor.session.setAnnotations([]); return; }
   try {

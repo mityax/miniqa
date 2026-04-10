@@ -36,6 +36,10 @@ JS_PACKAGE_DOWNLOAD_URLS = [
         "target": "js-yaml",
         "urls": ["https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"]
     },
+    {
+        "target": "ajv",
+        "urls": ["https://cdn.jsdelivr.net/npm/ajv@6.12.6/dist/ajv.min.js"]
+    }
 ]
 
 

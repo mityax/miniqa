@@ -48,14 +48,12 @@ const StepPopover = defineComponent({
       state.lightbox.visible = true;
     }
 
-    function pathOf(s) { return typeof s === 'string' ? s : s.path; }
-    function tagOf(s)  { return typeof s === 'string' ? '' : (s.tag || ''); }
     function imgUrl(p) { return `/api/img?path=${encodeURIComponent(p)}`; }
 
     return {
       isFailed, headerColor, headerLabel,
       refShot, actShot, hasDiff,
-      openDiff, openLightbox, pathOf, tagOf, imgUrl,
+      openDiff, openLightbox, imgUrl,
     };
   },
 
@@ -98,18 +96,18 @@ const StepPopover = defineComponent({
             v-for="(sc, si) in sr.screenshots"
             :key="si"
             class="step-screenshot-wrap"
-            :data-path="pathOf(sc)"
+            :data-path="sc.path"
             style="cursor:pointer"
             title="Click to enlarge"
-            @click="openLightbox(pathOf(sc))"
+            @click="openLightbox(sc.path)"
           >
             <span
-              v-if="tagOf(sc)"
-              :class="['screenshot-tag', 'screenshot-tag-' + tagOf(sc)]"
-            >{{ tagOf(sc) }}</span>
+              v-if="sc.tag"
+              :class="['screenshot-tag', 'screenshot-tag-' + sc.tag]"
+            >{{ sc.tag }}</span>
             <img
               class="step-screenshot-thumb"
-              :src="imgUrl(pathOf(sc))"
+              :src="imgUrl(sc.path)"
               :alt="'Screenshot ' + si"
               loading="lazy"
             />

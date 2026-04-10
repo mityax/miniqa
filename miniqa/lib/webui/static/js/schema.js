@@ -17,24 +17,11 @@ export async function loadSchema() {
 
 // -- AJV ----------------------------------------------------------------------
 
-function loadAjv() {
-  return new Promise(resolve => {
-    if (typeof Ajv !== 'undefined') { resolve(); return; }
-    const s    = document.createElement('script');
-    s.src      = 'https://cdn.jsdelivr.net/npm/ajv@6.12.6/dist/ajv.min.js';
-    s.onload   = resolve;
-    s.onerror  = resolve;
-    document.head.appendChild(s);
-  });
-}
-
 /**
  * Validate a parsed YAML object against the loaded schema.
  * Returns an array of human-readable error strings (empty = valid).
  */
 export async function validateAgainstSchema(parsed) {
-  await loadAjv();
-  if (typeof Ajv === 'undefined') return [];
   try {
     const ajv      = new Ajv({ allErrors: true, jsonPointers: true });
     const validate = ajv.compile(state.schema);
