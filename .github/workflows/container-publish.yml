@@ -25,7 +25,7 @@ jobs:
           TAG=${{ github.event.release.tag_name }}
 
           docker build . --file Containerfile --tag $IMAGE_NAME:$TAG-no-ocr
-          docker build . --file Containerfile --tag $IMAGE_NAME:$TAG
+          docker build . --file Containerfile --build-arg EXTRAS="ocr" --tag $IMAGE_NAME:$TAG
 
       - name: Push the Docker image
         run: |
