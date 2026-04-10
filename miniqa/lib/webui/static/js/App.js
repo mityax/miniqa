@@ -1,14 +1,3 @@
-/**
- * App.js — Root Vue component.
- *
- * Responsibilities:
- *   - Apply and persist the user's theme on boot
- *   - Load js-yaml from CDN (non-fatal)
- *   - Open the WebSocket connection
- *   - Coordinate view switching between pipeline ↔ edit
- *   - Mount all global overlays (lightbox, modals, toasts)
- */
-
 import {computed, defineComponent, onMounted, watch} from 'vue';
 import {state} from './state.js';
 import {initWs} from './api.js';
@@ -60,14 +49,6 @@ export const App = defineComponent({
     // -- Boot --------------------------------------------------------------
 
     onMounted(async () => {
-      // Load js-yaml from CDN — used for YAML linting and validation.
-      // Non-fatal: editing still works without it.
-      if (typeof jsyaml === 'undefined') {
-        const s = document.createElement('script');
-        s.src   = 'https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js';
-        document.head.appendChild(s);
-      }
-
       await loadSchema();
       initWs();
     });
