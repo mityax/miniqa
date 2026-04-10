@@ -5,6 +5,13 @@
 # This script will also download the latest GNOME OS nightly disk image, if its not yet present.
 # This is only a convenience script; you can easily launch miniQA as described in the Readme yourself.
 
+# To run tests:
+# $ ./run_miniqa.sh
+#
+# To open the webui:
+# $ ./run_miniqa.sh editor
+
+
 
 set -eou pipefail
 
