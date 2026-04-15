@@ -160,10 +160,20 @@ This step creates a screenshot of the VM, then, if a reference screenshot with t
 
 #### `assert` – Assert the Immediate Presence of an Element
 
-This step checks for an elements immediate presence (like `wait` with an effectively 0 timeout), and fails the test if it is not present.
+This step checks for a condition (like `wait` with an effectively 0 timeout), and fails the test if it is not met.
+
+It can be used in these ways:
 
 ```yaml
-- assert: <FindElement>
+- assert:
+    that: <FindElement>
+    regions: <Region> | <list of Region>  # optional
+```
+```yaml
+- assert:
+    that: <string>                        # name of a reference screenshot to match against
+    max_diff: <float>%                    # optional; difference tolerance, default: 1%
+    regions: <Region> | <list of Region>  # optional
 ```
 
 ## Custom Steps

@@ -151,7 +151,7 @@ class WaitStep(_BaseStep, NoExtraBaseModel):
 
 
 class AssertStep(_BaseStep, NoExtraBaseModel):
-    assert_: FindElement = pydantic.Field(alias="assert")
+    assert_: AssertArgs = pydantic.Field(alias="assert")
 
 
 class CustomStep(_BaseStep):
@@ -262,6 +262,17 @@ class WaitArgs(NoExtraBaseModel):
 
 class WaitForArgs(NoExtraBaseModel):
     dominant_color: str
+
+class AssertArgs(NoExtraBaseModel):
+    that: FindElement | str
+    max_diff: str | float | int = 0.01
+    regions: RegionOrRegions | None = None
+
+    @staticmethod
+    def create_from(value: 'AssertArgs | str') -> 'AssertArgs':
+        if isinstance(value, AssertArgs):
+            return value
+        return AssertArgs(that=value)
 
 
 # Reusable types/value types:

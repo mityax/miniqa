@@ -86,8 +86,7 @@ async def run_action(worker: QEMUWorker, step: f.Step, test_case: f.TestCase | N
             await _run_wait_step(step, worker)
 
         case f.AssertStep():
-            if not await find_element(step.assert_.find.text, step.assert_.find.background_color, step.assert_.find.location_hint):
-                raise TestException.PositionNotFound(f"Could not find element: {step.assert_.find}")
+            await _run_assert_step(step, worker)
 
         case f.CustomStep():
             await _run_custom_step(step, worker, test_case)
@@ -230,6 +229,39 @@ async def _run_screenshot_step(step: f.ScreenshotStep, worker: QEMUWorker):
         os.makedirs(os.path.dirname(ref_img), exist_ok=True)
         os.rename(out_img, ref_img)
 
+async def _run_assert_step(step: f.AssertStep, worker: QEMUWorker):
+    args = f.AssertArgs.create_from(step.assert_)
+    img = await worker.qmp.screendump()
+    match args.that:
+        case str():
+            ref_pth = os.path.join(CONFIG.refs_directory, args.that) + '.ppm'
+            diff = await asyncio.to_thread(
+                img_difference,
+                img,
+                ref_pth,
+                f.to_parsed_regions(args.regions),
+                f.to_parsed_regions(CONFIG.ignore_regions),
+            )
+            if diff > f.to_ratio(args.max_diff):
+                raise TestException.ImageMismatch(
+                    f"Image mismatch (diff: {diff * 100:.2f} %)",
+                    reference_name=args.that,
+                    reference_image=ref_pth,
+                    actual_image=img,
+                    regions=f.to_parsed_regions(args.regions),
+                    ignore_regions=f.to_parsed_regions(CONFIG.ignore_regions),
+                )
+        case f.FindElement():
+            el = find_element(
+                img,
+                args.that.find.text,
+                args.that.find.background_color,
+                args.that.find.location_hint,
+                f.to_parsed_regions(args.regions),
+                f.to_parsed_regions(CONFIG.ignore_regions)
+            )
+            if not await el:
+                raise TestException.PositionNotFound(f"Could not find element: {args.that.find}")
 
 async def _run_custom_step(step: f.CustomStep, worker: QEMUWorker, test_case: f.TestCase):
     keys = set(step.model_extra.keys()) - set(f.CustomStep.model_fields.keys())  # exclude default step keys
