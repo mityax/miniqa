@@ -1,5 +1,5 @@
 
-# This test starts at boot and will work through the GNOME OS setpu wizard appearing 
+# This test starts at boot and will work through the GNOME OS setup wizard appearing 
 # automatically. It'll then create a snapshot called "base", from which other tests
 # can start.
 
