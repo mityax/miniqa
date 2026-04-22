@@ -39,3 +39,14 @@ my_key: "Current directory: $(pwd), system info: $(uname -a)"
 ```
 
 Scripts are ran in the directory your `miniqa.yml` file is located in.
+
+## Escaping
+
+Both, the variable and the inline script syntax can be escaped using a double `$` sign – e.g.:
+
+```yaml
+$$NOT A VARIABLE  # becomes: "$NOT A VARIABLE"
+$$(not a script)  # becomes: "$(not a script)"
+```
+
+There's no need to escape `$` signs generally; since variable parsing is regex-based, any dollar sign that is not part of a valid variable or inline script structure will be left as-is.
