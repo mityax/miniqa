@@ -25,7 +25,7 @@ Variables can be part of a string in which they'll be substituted (e.g. `"My nam
 my_key: $MY_VALUE
 
 my_list:
-	- $MY_LIST_ITEM
+    - $MY_LIST_ITEM
 ```
 
 If you use variables directly as values, and not as part of a string substitution, their original value type will be preserved; therefore you can also store complex structures like lists or mappings in variables.
