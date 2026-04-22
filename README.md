@@ -5,6 +5,10 @@ A simple to use automated QA test tool: miniQA runs an OS of your choice in QEMU
 
 miniQA includes a simple web editor/mini IDE providing some helpful tools to write your test cases in quick iterations with the VM screen on the side.
 
+[![Screenshot of miniQA's WebUI](docs/img/hero.png)](docs/img/hero.png)
+
+There's also a short [screencast](https://mityax.github.io/miniqa/img/miniqa_tour_screencast.mp4) showcasing a typical workflow (apologies for the typos).
+
 ## Setup
 
 ### Via PIP
